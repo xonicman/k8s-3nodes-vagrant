@@ -10,7 +10,7 @@ This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and
     6.0.12r132055
     
     > vagrant plugin list | grep hostmanager
-    vagrant-hostmanager (1.8.9, global
+    vagrant-hostmanager (1.8.9, global)
         
     └> uname -s; uname -r
     Linux
