@@ -30,7 +30,7 @@ EOMESSAGE
 usermod -aG dockerroot vagrant
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
-curl https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip --output /tmp/tf.zip
+curl https://releases.hashicorp.com/terraform/0.12.12/terraform_0.12.12_linux_amd64.zip --output /tmp/tf.zip
 unzip /tmp/tf.zip
 chmod a+x terraform
 mv terraform /usr/local/bin/
