@@ -42,7 +42,7 @@ To ssh on any node:
     vagrant ssh [master|worker01|worker02]
      
     
-## Additional manaul steps required
+## Additional manual steps required
 **Please note this setup is not fully automated**.
 After creating environment with `vagrant up` you need
 to do few steps manually:
