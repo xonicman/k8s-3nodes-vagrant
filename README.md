@@ -1,13 +1,16 @@
 # About
 To play with Kubernetes you don't need to use minicube. You can run fully - 3 or more nodes cluster on your dekstop/laptop system with Vagrant and Virtualbox. 
 
-This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and was succesfully tested on Linux with Vagrant and Virtualbox versions:
+This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and was succesfully tested on Linux with Vagrant (plus hostmanager plugin) and Virtualbox versions:
 
     └> vagrant --version
     Vagrant 2.2.5
 
     └> vboxmanage --version
     6.0.12r132055
+    
+    > vagrant plugin list | grep hostmanager
+    vagrant-hostmanager (1.8.9, global
         
     └> uname -s; uname -r
     Linux
