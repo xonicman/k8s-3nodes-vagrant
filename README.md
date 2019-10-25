@@ -98,7 +98,9 @@ Now you can play with kubernetes! Happy learning!
 # Extra info
  
 ## Terraform installed as well
-Because kubernetes cluster and pods are very often deployed via terraform, it was also added to bootstrap script. 
+Because kubernetes is very often controlled via terraform, it was also added to bootstrap script. Just ssh in into master and run:
+
+    terraform version
 
 ## Usefull links
 * https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/
