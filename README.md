@@ -107,3 +107,4 @@ Because kubernetes is very often controlled via terraform, it was also added to 
 
 ## Usefull links
 * https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/
+* http://www.vadmin-land.com/2018/11/how-to-enable-kubectl-autocompletion/
