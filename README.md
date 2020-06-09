@@ -4,10 +4,10 @@ To learn and play with Kubernetes you can use minicube, but with this solution y
 
 # Requiremets
 
-Software: Vagrant (with vagrant-hostmanager plugin), Virtualbox
-Hardware: 2GB RAM for each node (6GB for 3 nodes). At least 4 core processor.
+- Software: Vagrant (with vagrant-hostmanager plugin), Virtualbox.
+- Hardware: 2GB RAM for each node (6GB for 3 nodes). At least 4 core processor.
 
-Tested on:
+Tested successfully on MacOS:
 
     ╰─$ uname -s; uname -r
     Darwin
@@ -15,19 +15,30 @@ Tested on:
 
     └> vagrant --version
     Vagrant 2.2.9
-    # if missing install Vagrant 2.2.9 (recommended directly from Hashicorp site)
 
     ╰─$ VBoxManage --version
     6.1.10r138449
-    # if missing install VirtualBox 6.1
     
     ╰─$ vagrant plugin list | grep vagrant-hostmanager
     vagrant-hostmanager (1.8.9, global)
     
-        
 
-Should work also on Linux & Windows environments with Vagrant and Virtualbox installed, but tests was not done yet for such hosts. 
+Tested successfully on Linux:
 
+    └> uname -s; uname -r
+    Linux
+    5.5.13-arch2-1
+
+    └> vagrant --version
+    Vagrant 2.2.7
+
+    └> vboxmanage --version
+    6.1.4r136177
+
+    └> vagrant plugin list | grep vagrant-hostmanager
+    vagrant-hostmanager (1.8.9, global)
+
+Should work also on Windows environment with Vagrant and Virtualbox installed, but tests was not done yet for such host. 
 
 # How-To
 
