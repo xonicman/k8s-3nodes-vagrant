@@ -4,17 +4,17 @@ To play with Kubernetes you don't need to use minicube. You can run fully - 3 or
 This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and was succesfully tested on Linux with Vagrant (plus hostmanager plugin) and Virtualbox versions:
 
     └> vagrant --version
-    Vagrant 2.2.5
+    Vagrant 2.2.9
 
-    └> vboxmanage --version
-    6.0.12r132055
+    ╰─$ VBoxManage --version
+    6.1.10r138449
     
     > vagrant plugin list | grep hostmanager
     vagrant-hostmanager (1.8.9, global)
         
-    └> uname -s; uname -r
-    Linux
-    5.3.0-arch1-1-ARCH
+    ╰─$ uname -s; uname -r
+    Darwin
+    19.5.0
 
 # Usage
 
@@ -50,50 +50,36 @@ To ssh on any node:
 After creating environment with `vagrant up` you need
 to do few steps manually:
 
-Ssh to master and init k8s configuration:
+On master init k8s configuration (can take few minutes):
 
-    cd k8s-3nodes-vagrant
-    vagrant ssh master
-    sudo su -
-    whoami #make sure you are working as root
-    kubeadm init --apiserver-advertise-address 192.168.7.100 --pod-network-cidr=10.244.0.0/16
+    sudo kubeadm init --apiserver-advertise-address 192.168.7.100 --pod-network-cidr=10.244.0.0/16
  
-At the end of above command you will see command line that should be used 
- on all worker nodes to join cluster. Please note that command. It should 
- something like `kubeadm join --token TOKEN IP` - you will use that command later.
+At the end of above command output you will see command to join workers with master
+ server. Copy that line `kubeadm join --token TOKEN IP ...` as you need that later.
  
-Now prepare configuration for `vagrant` user on master server - you
-will control k8s via this user:
+Continue on master server:
 
-    exit #to log out from root
-    whoami #to make sure you are logged as vagrant user
     mkdir -p $HOME/.kube
     sudo cp  -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    
-Now set up k8s networking as vagrant user:
+    kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/canal.yaml
 
-    whoami #to make sure you are logged as vagrant
-    kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
-
-Next ssh to each worker and run command that you noted in previous steps to join workers into cluster
+On each worker execute command `kubeadm join --token TOKEN IP ...`
 
     exit # to log out from master
     vagrant ssh worker01
-    kubeadm join --token TOKEN IP
+    # sudo kubeadm join --token TOKEN IP --discovery-token-ca-cert-hash 
     exit
     vagrant ssh worker02
-    kubeadm join --token TOKEN IP
+    sudo kubeadm join --token TOKEN IP
     
 Now log in to master, wait few minutes and check if all nodes are in "Ready" status:
 
-    exit # to log out from worker02
-    vagrant ssh master
-    kubectl get nodes #should give output
-    NAME       STATUS   ROLES    AGE   VERSION
-    master     Ready    master   22d   v1.14.6
-    worker01   Ready    <none>   22d   v1.14.6
-    worker02   Ready    <none>   22d   v1.14.6
+    $ kubectl get nodes
+    NAME       STATUS   ROLES    AGE     VERSION
+    master     Ready    master   6m45s   v1.18.3
+    worker01   Ready    <none>   2m26s   v1.18.3
+    worker02   Ready    <none>   97s     v1.18.3
 
      
 Now you can play with kubernetes! Happy learning!

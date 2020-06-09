@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "4096"
+    vb.memory = "2048"
     vb.cpus = 2
     vb.gui = false
   end
@@ -27,10 +27,10 @@ Vagrant.configure("2") do |config|
  	  worker01.vm.provision :shell, path: "bootstrap/bootstrapKubeletDocker.sh"
   end
 
-  config.vm.define "worker02" do |worker02|
-	  worker02.vm.network "private_network", ip: "192.168.7.102"
-	  worker02.vm.hostname = "worker02"
- 	  worker02.vm.provision :shell, path: "bootstrap/bootstrapKubeletDocker.sh"
-  end
+#  config.vm.define "worker02" do |worker02|
+#	  worker02.vm.network "private_network", ip: "192.168.7.102"
+#	  worker02.vm.hostname = "worker02"
+#   worker02.vm.provision :shell, path: "bootstrap/bootstrapKubeletDocker.sh"
+#  end
 
 end

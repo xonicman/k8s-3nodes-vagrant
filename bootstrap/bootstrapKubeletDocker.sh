@@ -19,7 +19,7 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOMESSAGE
 #yum install kubeadm docker -y
-yum install kubeadm-1.14.6 kubectl-1.14.6 kubelet-1.14.6 docker -y
+yum install kubeadm-1.18.3 kubectl-1.18.3 kubelet-1.18.3 docker -y
 
 cat <<EOMESSAGE > /etc/docker/daemon.json
 {
@@ -30,19 +30,7 @@ EOMESSAGE
 usermod -aG dockerroot vagrant
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
-curl https://releases.hashicorp.com/terraform/0.12.12/terraform_0.12.12_linux_amd64.zip --output /tmp/tf.zip
-unzip /tmp/tf.zip
-chmod a+x terraform
-mv terraform /usr/local/bin/
 
 echo 
-echo Almost done
+echo Almost done. README.md for further steps to configure k8s cluster.
 echo
-echo SSH to MASTER and as ROOT in SCREEN session do:
-echo "kubeadm init --apiserver-advertise-address 192.168.7.100 --pod-network-cidr=10.244.0.0/16"
-echo
-echo Then on MASTER as VAGRANT user RUN commands from previous command output 
-echo and this one:
-echo "kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml"
-echo
-
