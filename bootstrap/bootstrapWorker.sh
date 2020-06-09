@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-yum -y install screen yum-plugin-downloadonly tree htop vim net-tools unzip git
+KUBEJOIN="/vagrant/tmp/kubejoin.sh"
+
+yum -y install screen yum-plugin-downloadonly tree htop vim net-tools unzip git nfs-utils
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 modprobe br_netfilter && \
@@ -31,6 +33,5 @@ usermod -aG dockerroot vagrant
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
 
-echo 
-echo Almost done. README.md for further steps to configure k8s cluster.
-echo
+# only for worker:
+/bin/bash $KUBEJOIN

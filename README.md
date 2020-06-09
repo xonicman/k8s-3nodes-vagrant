@@ -5,12 +5,15 @@ This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and
 
     └> vagrant --version
     Vagrant 2.2.9
+    # if missing install Vagrant 2.2.9 (recommended directly from Hashicorp site)
 
     ╰─$ VBoxManage --version
     6.1.10r138449
+    # if missing install VirtualBox 6.1
     
-    > vagrant plugin list | grep hostmanager
+    > vagrant plugin list | grep vagrant-hostmanager
     vagrant-hostmanager (1.8.9, global)
+    # if missing use: vagrant plugin install vagrant-hostmanager
         
     ╰─$ uname -s; uname -r
     Darwin
@@ -83,14 +86,3 @@ Now log in to master, wait few minutes and check if all nodes are in "Ready" sta
 
      
 Now you can play with kubernetes! Happy learning!
-     
-# Extra info
- 
-## Terraform installed as well
-Because kubernetes is very often controlled via terraform, it was also added to bootstrap script. Just ssh in into master and run:
-
-    terraform version
-
-## Usefull links
-* https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/
-* http://www.vadmin-land.com/2018/11/how-to-enable-kubectl-autocompletion/
