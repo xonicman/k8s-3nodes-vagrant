@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-KUBEJOIN="/srv/k8s/kubejoin.sh"
+VAGRANTSHARE="/srv/vagrant"
+KUBEJOIN="$VAGRANTSHARE/kubejoin.sh"
 KUBEINITLOG="/root/kubeinit.log"
 VHOME="/home/vagrant"
 
@@ -15,4 +16,5 @@ cp -n /etc/kubernetes/admin.conf $VHOME/.kube/config
 chown -R vagrant.vagrant $VHOME/.kube
 mkdir /root/.kube
 cp -n /etc/kubernetes/admin.conf /root/.kube/config
+cp -n /etc/kubernetes/admin.conf $VAGRANTSHARE/k8s-config
 kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/canal.yaml

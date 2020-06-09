@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-KUBEJOIN="/srv/k8s/kubejoin.sh"
+VAGRANTSHARE="/srv/vagrant"
+KUBEJOIN="$VAGRANTSHARE/kubejoin.sh"
 
 source /vagrant/bootstrap/common.sh
 source $KUBEJOIN

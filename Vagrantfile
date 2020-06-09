@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |master|
     master.vm.network "private_network", ip: "192.168.7.100"
     master.vm.hostname = "master"
-    master.vm.synced_folder "tmp/", "/srv/k8s"
+    master.vm.synced_folder "share/", "/srv/vagrant"
     master.vm.provision :shell, path: "bootstrap/bootstrapMaster.sh"
     master.vm.boot_timeout = 600
   end
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "worker01" do |worker01|
     worker01.vm.network "private_network", ip: "192.168.7.101"
     worker01.vm.hostname = "worker01"
-    worker01.vm.synced_folder "tmp/", "/srv/k8s"
+    worker01.vm.synced_folder "share/", "/srv/vagrant"
     worker01.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
   end
 

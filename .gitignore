@@ -1,3 +1,4 @@
 .vagrant
 .idea
-tmp/*
+share/*
+!share/.do-not-remove-that-directory
