@@ -1,2 +1,4 @@
 .vagrant
 .idea
+share/*
+!share/.do-not-remove-that-directory

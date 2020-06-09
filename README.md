@@ -1,110 +1,119 @@
 # About
-To play with Kubernetes you don't need to use minicube. You can run fully - 3 or more nodes cluster on your dekstop/laptop system with Vagrant and Virtualbox. 
 
-This repo was prepared to help you set up quickly 3 nodes Kubernetes cluster and was succesfully tested on Linux with Vagrant (plus hostmanager plugin) and Virtualbox versions:
+To learn and play with Kubernetes you can use minicube, but with this solution you can run 3 or more nodes cluster on your dekstop/laptop system.
+
+# Requiremets
+
+- Software: Vagrant (with vagrant-hostmanager plugin), Virtualbox.
+- Hardware: 2GB RAM for each node (6GB for 3 nodes). At least 4 core processor.
+
+Tested successfully on MacOS:
+
+    ╰─$ uname -s; uname -r
+    Darwin
+    19.5.0
 
     └> vagrant --version
-    Vagrant 2.2.5
+    Vagrant 2.2.9
 
-    └> vboxmanage --version
-    6.0.12r132055
+    ╰─$ VBoxManage --version
+    6.1.10r138449
     
-    > vagrant plugin list | grep hostmanager
+    ╰─$ vagrant plugin list | grep vagrant-hostmanager
     vagrant-hostmanager (1.8.9, global)
-        
+    
+
+Tested successfully on Linux:
+
     └> uname -s; uname -r
     Linux
-    5.3.0-arch1-1-ARCH
+    5.5.13-arch2-1
 
-# Usage
+    └> vagrant --version
+    Vagrant 2.2.7
 
-To create environment
+    └> vboxmanage --version
+    6.1.4r136177
 
-    git clone https://github.com/xonicman/k8s-3nodes-vagrant.git 
-    cd k8s-3nodes-vagrant
-    vagrant up
+    └> vagrant plugin list | grep vagrant-hostmanager
+    vagrant-hostmanager (1.8.9, global)
 
-To destroy environment
-    
-    cd k8s-3nodes-vagrant
-    vagrant destroy
-    
-To stop environment
+Should work also on Windows environment with Vagrant and Virtualbox installed, but tests was not done yet for such host. 
+
+# How-To
+
+## Installation
+
+    host$ git clone https://github.com/xonicman/k8s-3nodes-vagrant.git 
+    host$ cd k8s-3nodes-vagrant
+    host$ vagrant up
+
+## Usage
+
+    host$ cd k8s-3nodes-vagrant
+    host$ vagrant ssh master
+    master$ kubectl get nodes
+    NAME       STATUS   ROLES    AGE     VERSION
+    master     Ready    master   6m45s   v1.18.3
+    worker01   Ready    <none>   2m26s   v1.18.3
+    worker02   Ready    <none>   97s     v1.18.3
+
+
+## Other usefull commands
+
+### Stop environment
 
     cd k8s-3nodes-vagrant
     vagrant halt
 
-To bring up stopped environment
+### Bring up stopped environment
 
     cd k8s-3nodes-vagrant
     vagrant up
 
-To ssh on any node:
+### ssh to any node
 
     cd k8s-3nodes-vagrant
     vagrant ssh [master|worker01|worker02]
      
-    
-## Additional manual steps required
-**Please note this setup is not fully automated**.
-After creating environment with `vagrant up` you need
-to do few steps manually:
-
-Ssh to master and init k8s configuration:
+### Recreate environment
 
     cd k8s-3nodes-vagrant
-    vagrant ssh master
-    sudo su -
-    whoami #make sure you are working as root
-    kubeadm init --apiserver-advertise-address 192.168.7.100 --pod-network-cidr=10.244.0.0/16
- 
-At the end of above command you will see command line that should be used 
- on all worker nodes to join cluster. Please note that command. It should 
- something like `kubeadm join --token TOKEN IP` - you will use that command later.
- 
-Now prepare configuration for `vagrant` user on master server - you
-will control k8s via this user:
+    vagrant destroy -f && vagrant up
 
-    exit #to log out from root
-    whoami #to make sure you are logged as vagrant user
-    mkdir -p $HOME/.kube
-    sudo cp  -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+### Destroy environment
     
-Now set up k8s networking as vagrant user:
+    cd k8s-3nodes-vagrant
+    vagrant destroy
 
-    whoami #to make sure you are logged as vagrant
-    kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
+## Add/remove k8s workers
 
-Next ssh to each worker and run command that you noted in previous steps to join workers into cluster
+Destroy environment:
 
-    exit # to log out from master
-    vagrant ssh worker01
-    kubeadm join --token TOKEN IP
-    exit
-    vagrant ssh worker02
-    kubeadm join --token TOKEN IP
-    
-Now log in to master, wait few minutes and check if all nodes are in "Ready" status:
+    vagrant destroy
 
-    exit # to log out from worker02
-    vagrant ssh master
-    kubectl get nodes #should give output
-    NAME       STATUS   ROLES    AGE   VERSION
-    master     Ready    master   22d   v1.14.6
-    worker01   Ready    <none>   22d   v1.14.6
-    worker02   Ready    <none>   22d   v1.14.6
+Modify Vagrantfile and add/remove worker section like this one:
 
-     
-Now you can play with kubernetes! Happy learning!
-     
-# Extra info
- 
-## Terraform installed as well
-Because kubernetes is very often controlled via terraform, it was also added to bootstrap script. Just ssh in into master and run:
+    config.vm.define "workerXX" do |workerXX|
+	   workerXX.vm.network "private_network", ip: "192.168.7.1XX"
+	   workerXX.vm.hostname = "workerXX"
+       workerXX.vm.synced_folder "tmp/", "/srv/k8s"
+ 	   workerXX.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
+    end
 
-    terraform version
+To add 3rd worker add such code:
 
-## Usefull links
-* https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/
-* http://www.vadmin-land.com/2018/11/how-to-enable-kubectl-autocompletion/
+    config.vm.define "worker03" do |worker03|
+	  worker03.vm.network "private_network", ip: "192.168.7.103"
+	  worker03.vm.hostname = "worker03"
+      worker03.vm.synced_folder "tmp/", "/srv/k8s"
+      worker03.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
+    end
+
+Recreate environment
+
+    vagrant up
+
+## How to install vagrant-hostnamager plugin to Vagrant
+
+    vagrant plugin install vagrant-hostmanager
