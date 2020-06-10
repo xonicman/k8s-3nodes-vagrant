@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "worker02" do |worker02|
     worker02.vm.network "private_network", ip: "192.168.7.102"
     worker02.vm.hostname = "worker02"
-    worker02.vm.synced_folder "tmp/", "/srv/k8s"
+    worker02.vm.synced_folder "share/", "/srv/vagrant"
     worker02.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
   end
 

@@ -95,18 +95,18 @@ Destroy environment:
 Modify Vagrantfile and add/remove worker section like this one:
 
     config.vm.define "workerXX" do |workerXX|
-	   workerXX.vm.network "private_network", ip: "192.168.7.1XX"
-	   workerXX.vm.hostname = "workerXX"
-       workerXX.vm.synced_folder "tmp/", "/srv/k8s"
- 	   workerXX.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
+      workerXX.vm.network "private_network", ip: "192.168.7.1XX"
+      workerXX.vm.hostname = "workerXX"
+      workerXX.vm.synced_folder "share/", "/srv/vagrant"
+      workerXX.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
     end
 
 To add 3rd worker add such code:
 
     config.vm.define "worker03" do |worker03|
-	  worker03.vm.network "private_network", ip: "192.168.7.103"
-	  worker03.vm.hostname = "worker03"
-      worker03.vm.synced_folder "tmp/", "/srv/k8s"
+      worker03.vm.network "private_network", ip: "192.168.7.103"
+      worker03.vm.hostname = "worker03"
+      worker03.vm.synced_folder "share/", "/srv/vagrant"
       worker03.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
     end
 
