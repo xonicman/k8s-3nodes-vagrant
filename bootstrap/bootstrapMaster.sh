@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-VAGRANTSHARE="/srv/vagrant"
+export VAGRANTSHARE="/srv/vagrant"
 KUBEJOIN="$VAGRANTSHARE/kubejoin.sh"
 KUBEINITLOG="/root/kubeinit.log"
-VHOME="/home/vagrant"
+ VHOME="/home/vagrant"
 
 source /vagrant/bootstrap/common.sh
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VAGRANTSHARE="/srv/vagrant"
+export VAGRANTSHARE="/srv/vagrant"
 KUBEJOIN="$VAGRANTSHARE/kubejoin.sh"
 
 source /vagrant/bootstrap/common.sh

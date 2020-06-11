@@ -35,4 +35,5 @@ systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
 
 echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
+ln -s $VAGRANTSHARE /home/vagrant/share
 
