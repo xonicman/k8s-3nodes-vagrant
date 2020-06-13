@@ -52,9 +52,12 @@ cp /root/.oh-my-zsh/templates/zshrc.zsh-template /home/vagrant/.zshrc
 chown vagrant.vagrant /home/vagrant/.zshrc
 sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /root/.zshrc
 sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /home/vagrant/.zshrc
+echo "source <(kubectl completion zsh)" >> /root/.zshrc
+echo "source <(kubectl completion zsh)" >> /home/vagrant/.zshrc
 
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
 
 echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
 ln -s $VAGRANTSHARE /home/vagrant/share
+
