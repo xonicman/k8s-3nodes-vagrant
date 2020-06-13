@@ -2,7 +2,17 @@
 
 K8S_VERSION="1.18.3"
 
-yum -y install screen yum-plugin-downloadonly tree htop vim net-tools unzip git nfs-utils
+yum -y install \
+  screen \
+  yum-plugin-downloadonly \
+  tree \
+  htop \
+  vim \
+  net-tools \
+  unzip \
+  git \
+  nfs-utils \
+  zsh
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 modprobe br_netfilter && \
@@ -31,9 +41,20 @@ cat <<EOMESSAGE > /etc/docker/daemon.json
 EOMESSAGE
 
 usermod -aG dockerroot vagrant
+chsh -s /bin/zsh root
+chsh -s /bin/zsh vagrant
+
+wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+rsync -a /root/.oh-my-zsh /home/vagrant/
+chown vagrant.vagrant  -R /home/vagrant/.oh-my-zsh
+cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
+cp /root/.oh-my-zsh/templates/zshrc.zsh-template /home/vagrant/.zshrc
+chown vagrant.vagrant /home/vagrant/.zshrc
+sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /root/.zshrc
+sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /home/vagrant/.zshrc
+
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
 
 echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
 ln -s $VAGRANTSHARE /home/vagrant/share
-
