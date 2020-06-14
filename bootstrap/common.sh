@@ -2,6 +2,9 @@
 
 K8S_VERSION="1.18.3"
 
+
+# Requirements & usefull tools
+
 yum -y install \
   screen \
   yum-plugin-downloadonly \
@@ -12,14 +15,56 @@ yum -y install \
   unzip \
   git \
   nfs-utils \
-  zsh
+  zsh \
+  yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 modprobe br_netfilter && \
 sleep 3 && \
 echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+echo '1' > /proc/sys/net/bridge/bridge-nf-call-ip6tables
+
 swapoff -a
 sed -i '/swapfile/d' /etc/fstab
+
+
+# Docker
+
+yum-config-manager --add-repo \
+  https://download.docker.com/linux/centos/docker-ce.repo
+
+yum install -y \
+  containerd.io-1.2.13 \
+  docker-ce-19.03.11 \
+  docker-ce-cli-19.03.11
+
+mkdir /etc/docker
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+
+mkdir -p /etc/systemd/system/docker.service.d
+systemctl daemon-reload
+systemctl restart docker
+systemctl enable docker
+usermod -aG docker vagrant
+
+
+# Kubernetes
+
 cat <<EOMESSAGE > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -31,16 +76,14 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOMESSAGE
 
-yum install kubeadm-$K8S_VERSION kubectl-$K8S_VERSION kubelet-$K8S_VERSION docker -y
+yum install kubeadm-$K8S_VERSION kubectl-$K8S_VERSION kubelet-$K8S_VERSION --disableexcludes=kubernetes -y
 
-cat <<EOMESSAGE > /etc/docker/daemon.json
-{
-    "live-restore": true,
-    "group": "dockerroot"
-}
-EOMESSAGE
+systemctl enable --now kubelet
 
-usermod -aG dockerroot vagrant
+echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
+
+
+# ZSH
 chsh -s /bin/zsh root
 chsh -s /bin/zsh vagrant
 
@@ -54,10 +97,10 @@ sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /root/.zshrc
 sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /home/vagrant/.zshrc
 echo "source <(kubectl completion zsh)" >> /root/.zshrc
 echo "source <(kubectl completion zsh)" >> /home/vagrant/.zshrc
+# /ZSH
 
-systemctl restart docker && systemctl enable docker
-systemctl restart kubelet && systemctl enable kubelet
 
-echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
+# Other
+
 ln -s $VAGRANTSHARE /home/vagrant/share
 

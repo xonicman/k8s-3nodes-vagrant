@@ -17,4 +17,6 @@ chown -R vagrant.vagrant $VHOME/.kube
 mkdir /root/.kube
 cp -n /etc/kubernetes/admin.conf /root/.kube/config
 cp -n /etc/kubernetes/admin.conf $VAGRANTSHARE/k8s-config
-kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/canal.yaml
+
+kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+
