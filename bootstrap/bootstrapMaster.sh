@@ -3,7 +3,7 @@
 export VAGRANTSHARE="/srv/vagrant"
 KUBEJOIN="$VAGRANTSHARE/kubejoin.sh"
 KUBEINITLOG="/root/kubeinit.log"
- VHOME="/home/vagrant"
+VHOME="/home/vagrant"
 
 source /vagrant/bootstrap/common.sh
 
