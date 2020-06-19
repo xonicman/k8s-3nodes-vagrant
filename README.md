@@ -13,7 +13,7 @@ Tested successfully on MacOS:
     Darwin
     19.5.0
 
-    └$ vagrant --version
+    ╰─$ vagrant --version
     Vagrant 2.2.9
 
     ╰─$ VBoxManage --version
