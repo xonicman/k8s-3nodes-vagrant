@@ -35,9 +35,9 @@ yum-config-manager --add-repo \
   https://download.docker.com/linux/centos/docker-ce.repo
 
 yum install -y \
-  containerd.io-1.2.13 \
-  docker-ce-19.03.11 \
-  docker-ce-cli-19.03.11
+  containerd.io \
+  docker-ce \
+  docker-ce-cli
 
 mkdir /etc/docker
 cat > /etc/docker/daemon.json <<EOF
