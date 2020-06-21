@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-K8S_VERSION="1.18.3"
-
 
 # Requirements & usefull tools
 
@@ -37,9 +35,9 @@ yum-config-manager --add-repo \
   https://download.docker.com/linux/centos/docker-ce.repo
 
 yum install -y \
-  containerd.io-1.2.13 \
-  docker-ce-19.03.11 \
-  docker-ce-cli-19.03.11
+  containerd.io \
+  docker-ce \
+  docker-ce-cli
 
 mkdir /etc/docker
 cat > /etc/docker/daemon.json <<EOF
@@ -76,7 +74,8 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOMESSAGE
 
-yum install kubeadm-$K8S_VERSION kubectl-$K8S_VERSION kubelet-$K8S_VERSION --disableexcludes=kubernetes -y
+#install newest version
+yum install kubeadm kubectl kubelet --disableexcludes=kubernetes -y
 
 systemctl enable --now kubelet
 
