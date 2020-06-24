@@ -37,4 +37,7 @@ Vagrant.configure("2") do |config|
     worker02.vm.provision :shell, path: "bootstrap/bootstrapWorker.sh"
   end
 
+  # check https://docs.kublr.com/installation/hardware-recommendation/
+  # before you set too many workers
+
 end
