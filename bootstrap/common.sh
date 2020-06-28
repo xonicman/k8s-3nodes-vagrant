@@ -98,6 +98,15 @@ echo "source <(kubectl completion zsh)" >> /root/.zshrc
 echo "source <(kubectl completion zsh)" >> /home/vagrant/.zshrc
 # /ZSH
 
+cat <<EOT >> /etc/vimrc
+
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set autoindent
+
+EOT
+
 
 # Other
 
