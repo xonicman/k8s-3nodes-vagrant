@@ -83,20 +83,35 @@ echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
 
 
 # ZSH
+
 chsh -s /bin/zsh root
 chsh -s /bin/zsh vagrant
 
 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+
+cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
+
+sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /root/.zshrc
+
+cat <<EOT >> /root/.zshrc
+
+source <(kubectl completion zsh)
+
+export dr='--dry-run=client'
+export oy='-o yaml'
+export dry='--dry-run=client -o yaml'
+export gpf='--grace-period=0 --force'
+
+EOT
+
 rsync -a /root/.oh-my-zsh /home/vagrant/
 chown vagrant.vagrant  -R /home/vagrant/.oh-my-zsh
-cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
-cp /root/.oh-my-zsh/templates/zshrc.zsh-template /home/vagrant/.zshrc
+
+cp /root/.zshrc /home/vagrant/.zshrc
 chown vagrant.vagrant /home/vagrant/.zshrc
-sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /root/.zshrc
-sed -i 's/^ZSH_THEME.*/ZSH_THEME="bira"/g' /home/vagrant/.zshrc
-echo "source <(kubectl completion zsh)" >> /root/.zshrc
-echo "source <(kubectl completion zsh)" >> /home/vagrant/.zshrc
+
 # /ZSH
+
 
 cat <<EOT >> /etc/vimrc
 
