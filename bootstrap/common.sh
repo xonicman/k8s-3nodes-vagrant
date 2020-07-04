@@ -106,6 +106,8 @@ export gpf='--grace-period=0 --force'
 alias grep="grep -i"
 alias less="less -i"
 
+alias ksn="kubectl config set-context --current --namespace"
+
 EOT
 
 rsync -a /root/.oh-my-zsh /home/vagrant/
