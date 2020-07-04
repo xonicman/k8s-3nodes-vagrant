@@ -82,6 +82,7 @@ systemctl enable --now kubelet
 echo 'alias k=kubectl' >  /etc/profile.d/k8s.sh
 
 
+
 # ZSH
 
 chsh -s /bin/zsh root
@@ -101,6 +102,9 @@ export dr='--dry-run=client'
 export oy='-o yaml'
 export dry='--dry-run=client -o yaml'
 export gpf='--grace-period=0 --force'
+
+alias grep="grep -i"
+alias less="less -i"
 
 EOT
 
